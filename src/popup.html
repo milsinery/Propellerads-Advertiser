@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="popup.js"></script>
+
+    <style>
+      :root {
+        --color-brand: hsl(210, 100%, 50%);
+        --color-bad: hsl(10, 100%, 55%);
+        --color-good: hsl(90, 100%, 45%);
+        --color-main-text: hsl(0, 0%, 10%);
+        --color-optional-text: hsl(0, 0%, 70%);
+        --color-bg: hsl(0, 0%, 100%);
+
+        --space-min: 2px;
+        --space-mid: 16px;
+        --space-max: 24px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        height: 176px;
+        width: 184px;
+      }
+
+      body {
+        background-color: var(--color-bg);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        gap: var(--space-max);
+      }
+
+      h1,
+      h3 {
+        color: var(--color-main-text);
+      }
+
+      small {
+        color: var(--color-optional-text);
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-mid);
+      }
+
+      .info__balance,
+      .info__spending {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-min);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --color-bad: hsl(10, 100%, 35%);
+          --color-good: hsl(90, 100%, 30%);
+          --color-main-text: hsl(0, 0%, 85%);
+          --color-bg: hsl(225, 5%, 17%);
+        }
+      }
+    </style>
+  </head>
+  <body class="=" body>
+    <div class="info">
+      <div class="info__balance">
+        <small>Balance</small>
+        <h1 class="info__balance-data"></h1>
+      </div>
+      <div class="info__spending">
+        <small>Today's spending</small>
+        <h1 class="info__spending-data"></h1>
+      </div>
+    </div>
+    <a href="https://partners.propellerads.com/#/finance/add" target="_blank"
+      ><h3>Add funds</h3></a
+    >
+  </body>
+</html>

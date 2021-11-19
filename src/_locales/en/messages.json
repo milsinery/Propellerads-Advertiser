@@ -1,0 +1,10 @@
+{
+  "name": {
+    "message": "Aurora",
+    "description": "Extension name"
+  },
+  "description": {
+    "message": "Test Extension",
+    "description": "Extension description"
+  }
+}

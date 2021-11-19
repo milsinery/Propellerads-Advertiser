@@ -1,0 +1,21 @@
+{
+  "name": "__MSG_name__",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "default_locale": "en",
+  "description": "__MSG_description__",
+  "icons": {
+    "32": "./icons/icon32.png",
+    "64": "./icons/icon64.png",
+    "128": "./icons/icon128.png"
+  },
+  "permissions": ["storage", "alarms"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Total Daily Spending. Click for more information"
+  },
+  "options_page": "settings.html"
+}

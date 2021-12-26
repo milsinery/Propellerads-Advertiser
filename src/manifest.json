@@ -16,5 +16,8 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "Total Daily Spending. Click for more information"
+  },
+  "options_ui": {
+    "page": "options.html"
   }
 }

@@ -1,17 +1,7 @@
 <!DOCTYPE html>
-
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0 maximum-scale=1, user-scalable=0"
-    />
-    <title>Document</title>
-
-    <script src="popup.js"></script>
-
+    <title>Aurora Extension Options</title>
     <style>
       :root {
         --color-brand: hsl(210, 100%, 50%);
@@ -21,7 +11,7 @@
         --color-optional-text: hsl(0, 0%, 70%);
         --color-bg: hsl(0, 0%, 100%);
 
-        --space-min: 4px;
+        --space-min: 2px;
         --space-mid: 16px;
         --space-max: 24px;
       }
@@ -33,8 +23,8 @@
       }
 
       html {
-        height: min-content;
-        width: max-content;
+        height: 176px;
+        width: 184px;
       }
 
       body {
@@ -74,12 +64,6 @@
         gap: var(--space-min);
       }
 
-      .info__balance-block {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-min);
-      }
-
       @media (prefers-color-scheme: dark) {
         :root {
           --color-bad: hsl(10, 100%, 35%);
@@ -90,26 +74,21 @@
       }
     </style>
   </head>
-  <body class="=" body>
-    <div class="info">
-      <div class="info__balance-block">
-        <div class="info__balance">
-          <small>Balance</small>
-          <h1 id="balance-data" class="info__balance-data"></h1>
-        </div>
-        <a href="https://partners.propellerads.com/#/finance/add" target="_blank"
-        ><h3>Add funds</h3></a
-      >
-      </div>
-      <div class="info__spending">
-        <small>Today's spending</small>
-        <h1 id="spending-data" class="info__spending-data"></h1>
-      </div>
-      <div class="info__history">
-        <small>Previous day's spendings</small>
-        <h2 id="history-data" class="info__history-data"></h2>
-      </div>
+  <body>
+    <h2>Login</h2>
+    <div>
+      <input
+        id="login"
+        type="password"
+        placeholder="Paste your API token"
+        maxlength="48"
+        minlength="48"
+        autofocus="true"
+      />
+      <small>API token <a href="https://partners.propellerads.com/#/profile/api" target="_blank">in your account</a></small>
+      <input id="loginSet" type="submit" value="Save" />
     </div>
-    
+
+    <script src="options.js"></script>
   </body>
 </html>

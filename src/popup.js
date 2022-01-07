@@ -12,19 +12,19 @@ const renderInfo = (balance_data, spending_data, history_data) => {
   balance[0].innerText = `$${balance_data}`;
   spending[0].innerText = `$${spending_data}`;
 
-  if(history_data.length !== 0) {
+  if (history_data.length !== 0) {
     const result = [];
-    for(item of history_data) {
+    for (item of history_data) {
       result.push(` ${item}`);
     }
     history[0].innerText = result.toString();
   } else {
-    history[0].innerText = "No data yet"
+    history[0].innerText = 'No data yet';
   }
 };
 
 chrome.runtime.sendMessage({ action: 'popup_opened' }, (data) => {
-  console.log(data)
+  console.log(data);
   if (data === null) {
     renderLogin();
   } else {

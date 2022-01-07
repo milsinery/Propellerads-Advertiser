@@ -1,10 +1,10 @@
 {
   "name": {
-    "message": "Aurora",
+    "message": "PropellerAds Advertiser Cabinet Extension",
     "description": "Extension name"
   },
   "description": {
-    "message": "Test Extension",
+    "message": "This extension shows your balance, spendings for today and the last 6 days",
     "description": "Extension description"
   }
 }

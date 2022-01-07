@@ -6,9 +6,13 @@ const setToken = (key) => {
   chrome.storage.sync.set({ token: key });
 };
 
-const eraseToken = () => {
-  chrome.storage.sync.set({ token: null });
-};
+const resetData = () => {
+  chrome.storage.sync.set({ prevBalance: undefined });
+  chrome.storage.sync.set({ nowBalance: undefined });
+  chrome.storage.sync.set({ lastCheck: new Date().getDate() });
+  chrome.storage.sync.set({ spending: undefined });
+  chrome.storage.sync.set({ history: [] });
+}
 
 const setBadge = () => {
   chrome.storage.sync.get(['spending', 'nowBalance'], function (res) {
@@ -46,7 +50,7 @@ const setData = (balance) => {
     ['prevBalance', 'nowBalance', 'lastCheck', 'spending', 'history'],
     function (res) {
       console.log(res);
-      if (res.prevBalance === undefined) {
+      if (!res.prevBalance) {
         chrome.storage.sync.set({ prevBalance: balance });
       }
 
@@ -105,9 +109,10 @@ const updater = async (token) => {
 
 chrome.runtime.onMessage.addListener((req, info, cb) => {
   if (req.action === 'options_opened') {
-    console.log(req.token)
       setToken(req.token);
       chrome.runtime.reload();
+      resetData();
+      main();
     }
 });
 
@@ -119,9 +124,9 @@ const main = async (token) => {
     },
   });
   const result = await response.json();
-  console.log(result)
-  console.log(typeof result === 'string')
   login.isAuthorized = typeof result === 'string';
+
+  console.log(login.isAuthorized)
 
   if (login.isAuthorized === false) {
     chrome.runtime.onMessage.addListener((req, info, cb) => {

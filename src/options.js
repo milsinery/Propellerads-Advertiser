@@ -8,5 +8,7 @@ document.getElementById('loginSet').addEventListener('click', () => {
       token: loginInput.value,
     });
     window.close();
+  } else {
+    alert("test")
   }
 });

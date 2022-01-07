@@ -12,7 +12,7 @@ const resetData = () => {
   chrome.storage.sync.set({ lastCheck: new Date().getDate() });
   chrome.storage.sync.set({ spending: undefined });
   chrome.storage.sync.set({ history: [] });
-}
+};
 
 const setBadge = () => {
   chrome.storage.sync.get(['spending', 'nowBalance'], function (res) {
@@ -25,13 +25,10 @@ const setBadge = () => {
 };
 
 const refreshToken = () => {
-  chrome.storage.sync.get(
-    'token',
-    function (res) {
-      buffer.login = res.token;
-    }
-  );
-}
+  chrome.storage.sync.get('token', function (res) {
+    buffer.login = res.token;
+  });
+};
 
 const refreshBuffer = () => {
   chrome.storage.sync.get(
@@ -109,11 +106,11 @@ const updater = async (token) => {
 
 chrome.runtime.onMessage.addListener((req, info, cb) => {
   if (req.action === 'options_opened') {
-      setToken(req.token);
-      chrome.runtime.reload();
-      resetData();
-      main();
-    }
+    setToken(req.token);
+    chrome.runtime.reload();
+    resetData();
+    main();
+  }
 });
 
 const main = async (token) => {
@@ -126,8 +123,6 @@ const main = async (token) => {
   const result = await response.json();
   login.isAuthorized = typeof result === 'string';
 
-  console.log(login.isAuthorized)
-
   if (login.isAuthorized === false) {
     chrome.runtime.onMessage.addListener((req, info, cb) => {
       if (req.action === 'popup_opened') {
@@ -135,7 +130,11 @@ const main = async (token) => {
       }
     });
   } else {
-    updater(token);
+    chrome.alarms.create('updater', {
+      when: Date.now(),
+      periodInMinutes: 5,
+    });
+
     chrome.alarms.onAlarm.addListener((alarm) => {
       if (alarm.name === 'updater') {
         updater(token);
@@ -146,16 +145,11 @@ const main = async (token) => {
       if (req.action === 'popup_opened') {
         updater(token);
         cb(buffer);
-
-        chrome.alarms.create('updater', {
-          when: Date.now(),
-          periodInMinutes: 5,
-        });
       }
     });
   }
 };
 
-chrome.storage.sync.get('token', ({token}) => {
+chrome.storage.sync.get('token', ({ token }) => {
   main(token);
 });

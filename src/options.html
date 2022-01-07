@@ -53,6 +53,7 @@
 
       input {
         border: none;
+        outline: none;
       }
 
       button {
@@ -83,7 +84,7 @@
         width: 352px;
         padding: 4px 16px 5px 8px;
         border-radius: 4px;
-        transition: background 150ms ease-in-out;
+        transition: border 150ms ease-in-out;
       }
 
       .form__input:focus {
@@ -92,8 +93,8 @@
 
       .form__input:hover,
       .form__input:focus {
-        border-color: 1px solid var(--color-brand);
-        transition: background 150ms ease-in-out;
+        border: 1px solid var(--color-brand);
+        transition: border 150ms ease-in-out;
       }
 
       .form__button {
@@ -124,7 +125,7 @@
   </head>
   <body>
     <div class="form">
-      <h2>Login</h2>
+      <h2>Log in</h2>
       <div class="form__field">
         <input
           class="form__input"
@@ -135,7 +136,7 @@
           minlength="48"
         />
         <small class="form__link"
-          >API token
+          >Get API token
           <a
             href="https://partners.propellerads.com/#/profile/api"
             target="_blank"

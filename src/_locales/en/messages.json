@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "description": {
-    "message": "This extension shows your balance, spendings for today and the last 6 days",
+    "message": "This extension shows your balance, spendings for today and the last 6 days in realtime.",
     "description": "Extension description"
   }
 }

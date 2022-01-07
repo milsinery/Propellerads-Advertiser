@@ -92,9 +92,15 @@
       .info__special {
         display: flex;
         flex-direction: column;
-        background: linear-gradient(59.55deg, #FFFF02 0%, #D6FF0B 100%);;
-        padding: 12px 24px 16px 16px;
-        border-radius: 4px;
+        background: linear-gradient(59.55deg, #ffff02 0%, #d6ff0b 100%);
+        padding: 16px 24px 20px 16px;
+        gap: var(--space-mid);
+      }
+
+      .info__links {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-min);
       }
 
       @media (prefers-color-scheme: dark) {
@@ -110,6 +116,14 @@
   <body>
     <div class="info">
       <div class="info__main">
+        <div class="info__spending">
+          <small>Today's spending</small>
+          <h1 id="spending-data" class="info__spending-data"></h1>
+        </div>
+        <div class="info__history">
+          <small>Previous day's spendings</small>
+          <h2 id="history-data" class="info__history-data"></h2>
+        </div>
         <div class="info__balance-block">
           <div class="info__balance">
             <small>Balance</small>
@@ -121,28 +135,16 @@
             ><h3>Add funds</h3></a
           >
         </div>
-        <div class="info__spending">
-          <small>Today's spending</small>
-          <h1 id="spending-data" class="info__spending-data"></h1>
-        </div>
-        <div class="info__history">
-          <small>Previous day's spendings</small>
-          <h2 id="history-data" class="info__history-data"></h2>
-        </div>
       </div>
 
       <div class="info__special">
-        <small>Special offers</small>
-        <a
-          href="https://partners.propellerads.com/#/specials"
-          target="_blank"
-          ><h3>PropellerAds</h3></a
-        >
-        <a
-          href="https://zeydoo.com"
-          target="_blank"
-          ><h3>ZeyDoo</h3></a
-        >
+        <div class="info__links">
+          <small>Special offers</small>
+          <a href="https://partners.propellerads.com/#/specials" target="_blank"
+            ><h3>PropellerAds</h3></a
+          >
+          <a href="https://zeydoo.com" target="_blank"><h3>ZeyDoo</h3></a>
+        </div>
       </div>
     </div>
   </body>

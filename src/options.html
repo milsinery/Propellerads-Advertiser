@@ -5,7 +5,8 @@
     <style>
       :root {
         --color-brand: hsl(210, 100%, 50%);
-        --color-bad: hsl(10, 100%, 55%);
+        --color-brand-secondary: hsl(60, 97%, 55%);
+        --color-bad: hsl(0, 0%, 1%);
         --color-good: hsl(90, 100%, 45%);
         --color-main-text: hsl(0, 0%, 10%);
         --color-optional-text: hsl(0, 0%, 70%);
@@ -49,11 +50,13 @@
 
       a {
         text-decoration: none;
+        color: var(--color-brand);
       }
 
       input {
         border: none;
         outline: none;
+        background: none;
       }
 
       button {
@@ -98,10 +101,10 @@
       }
 
       .form__button {
+        color: white;
         border: none;
         border-radius: 4px;
         background-color: var(--color-brand);
-        color: var(--color-bg);
         width: 80px;
         height: 32px;
         padding: 4px 16px 6px 16px;
@@ -109,12 +112,13 @@
       }
 
       .form__button:hover {
-        background-color: var(--color-good);
+        background-color: var(--color-brand-secondary);
         transition: background 150ms ease-in-out;
       }
 
       @media (prefers-color-scheme: dark) {
         :root {
+          --color-brand-secondary: hsl(210, 100%, 26%);
           --color-bad: hsl(10, 100%, 35%);
           --color-good: hsl(90, 100%, 30%);
           --color-main-text: hsl(0, 0%, 85%);

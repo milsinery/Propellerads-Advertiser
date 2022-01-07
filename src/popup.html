@@ -15,7 +15,8 @@
     <style>
       :root {
         --color-brand: hsl(210, 100%, 50%);
-        --color-bad: hsl(10, 100%, 55%);
+        --color-brand-secondary: hsl(60, 97%, 55%);
+        --color-bad: hsl(0, 0%, 1%);
         --color-good: hsl(90, 100%, 45%);
         --color-main-text: hsl(0, 0%, 10%);
         --color-optional-text: hsl(0, 0%, 70%);
@@ -92,7 +93,7 @@
       .info__special {
         display: flex;
         flex-direction: column;
-        background: linear-gradient(59.55deg, #ffff02 0%, #d6ff0b 100%);
+        background-color: var(--color-brand-secondary);
         padding: 16px 24px 20px 16px;
         gap: var(--space-mid);
       }
@@ -105,6 +106,7 @@
 
       @media (prefers-color-scheme: dark) {
         :root {
+          --color-brand-secondary: hsl(210, 100%, 26%);
           --color-bad: hsl(10, 100%, 35%);
           --color-good: hsl(90, 100%, 30%);
           --color-main-text: hsl(0, 0%, 85%);

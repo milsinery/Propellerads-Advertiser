@@ -86,6 +86,14 @@
         gap: var(--space-min);
       }
 
+      .info__special {
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(59.55deg, #FFFF02 0%, #D6FF0B 100%);;
+        padding: 12px 24px 16px 16px;
+        border-radius: 4px;
+      }
+
       @media (prefers-color-scheme: dark) {
         :root {
           --color-bad: hsl(10, 100%, 35%);
@@ -96,7 +104,7 @@
       }
     </style>
   </head>
-  <body class="=" body>
+  <body>
     <div class="info">
       <div class="info__balance-block">
         <div class="info__balance">
@@ -118,10 +126,8 @@
         <h2 id="history-data" class="info__history-data"></h2>
       </div>
 
-      <hr>
-
-      <div>
-        <small>Special offers 🔥</small>
+      <div class="info__special">
+        <small>Special offers</small>
         <a
           href="https://partners.propellerads.com/#/specials"
           target="_blank"

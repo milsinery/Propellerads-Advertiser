@@ -24,7 +24,6 @@ const renderInfo = (balance, spending, history) => {
 };
 
 chrome.runtime.sendMessage({ action: 'popup_opened' }, (data) => {
-  console.log(data);
   if (data === null) {
     renderLogin();
   } else {

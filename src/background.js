@@ -5,7 +5,7 @@ const setToken = (key) => {
 };
 
 const setBadge = () => {
-  chrome.storage.sync.get(['spending', 'nowBalance'], function (res) {
+  chrome.storage.sync.get(['spending', 'nowBalance'], (res) => {
     chrome.action.setBadgeText({ text: res.spending });
     chrome.action.setBadgeBackgroundColor({
       color: res.nowBalance < 100 ? 'red' : '#0080FF',
@@ -16,7 +16,7 @@ const setBadge = () => {
 const setDataInStorage = (balance) => {
   chrome.storage.sync.get(
     ['prevBalance', 'nowBalance', 'lastCheck', 'spending', 'history'],
-    function (res) {
+    (res) => {
       console.log(res);
       if (!res.prevBalance) {
         chrome.storage.sync.set({ prevBalance: balance });
@@ -70,9 +70,8 @@ const resetData = () => {
 
 const resetSession = (token) => {
   setToken(token);
-  resetData();
+  setDataInStorage(token);
   chrome.runtime.reload();
-  main();
 };
 
 const main = async (token) => {
@@ -102,17 +101,13 @@ const main = async (token) => {
       }
     });
 
-    chrome.storage.sync.get(
-      ['nowBalance', 'spending', 'history'],
-      (res) => {
-        chrome.runtime.onMessage.addListener((req, info, cb) => {
-          if (req.action === 'popup_opened') {
-            const data = { nowBalance: res.nowBalance, spending: res.spending, history: res.history }
-            cb(data);
-          }
-        });
-      }
-    );
+    chrome.storage.sync.get(['nowBalance', 'spending', 'history'], (res) => {
+      chrome.runtime.onMessage.addListener((req, info, cb) => {
+        if (req.action === 'popup_opened') {
+          cb(res);
+        }
+      });
+    });
   }
 };
 

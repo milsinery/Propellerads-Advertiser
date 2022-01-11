@@ -1,6 +1,6 @@
-const balance = document.getElementsByClassName('info__balance-data');
-const spending = document.getElementsByClassName('info__spending-data');
-const history = document.getElementsByClassName('info__history-data');
+const balanceText = document.getElementsByClassName('info__balance-data');
+const spendingText = document.getElementsByClassName('info__spending-data');
+const historyText = document.getElementsByClassName('info__history-data');
 
 const renderLogin = () => {
   chrome.tabs.create({
@@ -8,18 +8,18 @@ const renderLogin = () => {
   });
 };
 
-const renderInfo = (balance_data, spending_data, history_data) => {
-  balance[0].innerText = `$${balance_data}`;
-  spending[0].innerText = `$${spending_data}`;
+const renderInfo = (balance, spending, history) => {
+  balanceText[0].innerText = `$${balance}`;
+  spendingText[0].innerText = `$${spending}`;
 
-  if (history_data.length !== 0) {
+  if (history.length !== 0) {
     const result = [];
-    for (item of history_data) {
+    for (item of history) {
       result.push(` ${item}`);
     }
-    history[0].innerText = result.toString();
+    historyText[0].innerText = result.toString();
   } else {
-    history[0].innerText = 'No data yet';
+    historyText[0].innerText = 'No data yet';
   }
 };
 

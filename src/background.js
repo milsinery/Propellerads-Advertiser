@@ -1,21 +1,11 @@
-const balanceUrl = 'https://ssp-api.propellerads.com/v5/adv/balance';
-const buffer = { nowBalance: '0.00', spending: '0.00', history: [] };
+const URL = 'https://ssp-api.propellerads.com/v5/adv/balance';
 
 const setToken = (key) => {
   chrome.storage.sync.set({ token: key });
 };
 
-const resetData = () => {
-  chrome.storage.sync.set({ prevBalance: null });
-  chrome.storage.sync.set({ nowBalance: null });
-  chrome.storage.sync.set({ lastCheck: new Date().getDate() });
-  chrome.storage.sync.set({ spending: null });
-  chrome.storage.sync.set({ history: [] });
-};
-
 const setBadge = () => {
   chrome.storage.sync.get(['spending', 'nowBalance'], function (res) {
-    setBadge(res.nowBalance, res.spending);
     chrome.action.setBadgeText({ text: res.spending });
     chrome.action.setBadgeBackgroundColor({
       color: res.nowBalance < 100 ? 'red' : '#0080FF',
@@ -23,19 +13,7 @@ const setBadge = () => {
   });
 };
 
-const refreshBuffer = () => {
-  chrome.storage.sync.get(
-    ['nowBalance', 'spending', 'history'],
-    function (res) {
-      buffer.nowBalance = res.nowBalance;
-      buffer.spending = res.spending;
-      buffer.history = res.history;
-    }
-  );
-  setBadge();
-};
-
-const setData = (balance) => {
+const setDataInStorage = (balance) => {
   chrome.storage.sync.get(
     ['prevBalance', 'nowBalance', 'lastCheck', 'spending', 'history'],
     function (res) {
@@ -76,20 +54,29 @@ const setData = (balance) => {
       chrome.storage.sync.set({ nowBalance: balance });
 
       chrome.storage.sync.set({ lastCheck: new Date().getDate() });
-      refreshBuffer();
+
+      setBadge();
     }
   );
 };
 
+const resetData = () => {
+  chrome.storage.sync.set({ prevBalance: null });
+  chrome.storage.sync.set({ nowBalance: null });
+  chrome.storage.sync.set({ lastCheck: new Date().getDate() });
+  chrome.storage.sync.set({ spending: null });
+  chrome.storage.sync.set({ history: [] });
+};
+
 const resetSession = (token) => {
   setToken(token);
-  chrome.runtime.reload();
   resetData();
+  chrome.runtime.reload();
   main();
 };
 
 const main = async (token) => {
-  const response = await fetch(balanceUrl, {
+  const response = await fetch(URL, {
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
@@ -111,16 +98,21 @@ const main = async (token) => {
 
     chrome.alarms.onAlarm.addListener((alarm) => {
       if (alarm.name === 'updater') {
-        setData(result);
+        setDataInStorage(result);
       }
     });
 
-    chrome.runtime.onMessage.addListener((req, info, cb) => {
-      if (req.action === 'popup_opened') {
-        setData(result);
-        cb(buffer);
+    chrome.storage.sync.get(
+      ['nowBalance', 'spending', 'history'],
+      (res) => {
+        chrome.runtime.onMessage.addListener((req, info, cb) => {
+          if (req.action === 'popup_opened') {
+            const data = { nowBalance: res.nowBalance, spending: res.spending, history: res.history }
+            cb(data);
+          }
+        });
       }
-    });
+    );
   }
 };
 

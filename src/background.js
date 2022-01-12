@@ -17,7 +17,6 @@ const setDataInStorage = (balance) => {
   chrome.storage.sync.get(
     ['prevBalance', 'nowBalance', 'lastCheck', 'spending', 'history'],
     (res) => {
-      console.log(res);
       if (!res.prevBalance) {
         chrome.storage.sync.set({ prevBalance: balance });
       }
@@ -60,15 +59,7 @@ const setDataInStorage = (balance) => {
   );
 };
 
-const resetData = () => {
-  chrome.storage.sync.set({ prevBalance: null });
-  chrome.storage.sync.set({ nowBalance: null });
-  chrome.storage.sync.set({ lastCheck: new Date().getDate() });
-  chrome.storage.sync.set({ spending: null });
-  chrome.storage.sync.set({ history: [] });
-};
-
-const resetSession = (token) => {
+const startNewSession = (token) => {
   setToken(token);
   setDataInStorage(token);
   chrome.runtime.reload();
@@ -84,23 +75,27 @@ const main = async (token) => {
   const result = await response.json();
 
   if (typeof result !== 'string') {
+    // click icon action for invalid token
     chrome.runtime.onMessage.addListener((req, info, cb) => {
       if (req.action === 'popup_opened') {
         cb(null);
       }
     });
   } else {
+    // set timer for every 5 minutes
     chrome.alarms.create('updater', {
       when: Date.now(),
       periodInMinutes: 5,
     });
 
+    // timer action
     chrome.alarms.onAlarm.addListener((alarm) => {
       if (alarm.name === 'updater') {
         setDataInStorage(result);
       }
     });
 
+    // click icon action for valid token
     chrome.storage.sync.get(['nowBalance', 'spending', 'history'], (res) => {
       chrome.runtime.onMessage.addListener((req, info, cb) => {
         if (req.action === 'popup_opened') {
@@ -111,12 +106,14 @@ const main = async (token) => {
   }
 };
 
+// options open action
 chrome.runtime.onMessage.addListener((req, info, cb) => {
   if (req.action === 'options_opened') {
-    resetSession(req.token);
+    startNewSession(req.token);
   }
 });
 
+// main action
 chrome.storage.sync.get('token', ({ token }) => {
   main(token);
 });

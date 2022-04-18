@@ -1,119 +1,225 @@
-const URL = 'https://ssp-api.propellerads.com/v5/adv/balance';
+const balanceURL = 'https://ssp-api.propellerads.com/v5/adv/balance';
+const workingCampaignsURL = 'https://ssp-api.propellerads.com/v5/adv/campaigns?status%5B%5D=6&is_archived=0';
+const statisticsURL = 'https://ssp-api.propellerads.com/v5/adv/statistics';
+
+// date formatter
+Date.prototype.format = function (format) {
+  const replaces = {
+    yyyy: this.getFullYear(),
+    mm: ('0' + (this.getMonth() + 1)).slice(-2),
+    dd: ('0' + this.getDate()).slice(-2),
+    hh: ('0' + this.getHours()).slice(-2),
+    MM: ('0' + this.getMinutes()).slice(-2),
+    ss: ('0' + this.getSeconds()).slice(-2),
+  };
+
+  let result = format;
+
+  for (const replace in replaces) {
+    result = result.replace(replace, replaces[replace]);
+  }
+
+  return result;
+};
 
 const setToken = (key) => {
   chrome.storage.sync.set({ token: key });
 };
 
-const setBadge = () => {
-  chrome.storage.sync.get(['spending', 'nowBalance'], (res) => {
-    chrome.action.setBadgeText({ text: res.spending });
-    chrome.action.setBadgeBackgroundColor({
-      color: res.nowBalance < 100 ? 'red' : '#0080FF',
-    });
-  });
-};
+const setBadge = (spending) => {
+  const numberFormatterForBadge = (num) => {
+    const formatedNum = parseInt(num);
 
-const setDataInStorage = (balance) => {
-  chrome.storage.sync.get(
-    ['prevBalance', 'nowBalance', 'lastCheck', 'spending', 'history'],
-    (res) => {
-      if (!res.prevBalance) {
-        chrome.storage.sync.set({ prevBalance: balance });
-      }
+    if (formatedNum < 10) return num.toFixed(3).toString();
 
-      if (res.lastCheck - new Date().getDate() !== 0) {
-        chrome.storage.sync.set({ prevBalance: balance });
-      }
+    if (formatedNum >= 10 && formatedNum <= 99)
+      return num.toFixed(2).toString();
 
-      chrome.storage.sync.set({ nowBalance: balance });
+    if (formatedNum > 99 && formatedNum < 10000) return formatedNum.toString();
 
-      if (res.lastCheck - new Date().getDate() !== 0) {
-        if (res.history.length === 6) {
-          const result = res.history.slice(0, 5);
-          result.unshift(res.spending);
-          chrome.storage.sync.set({ history: result });
-        } else {
-          const result = res.history;
-          result.unshift(res.spending);
-          chrome.storage.sync.set({ history: result });
-        }
-      }
-
-      chrome.storage.sync.set({
-        spending: (res.prevBalance - balance).toFixed(2).toString(),
-      });
-
-      if (
-        res.lastCheck - new Date().getDate() !== 0 ||
-        balance > res.prevBalance
-      ) {
-        chrome.storage.sync.set({ prevBalance: balance });
-      }
-
-      chrome.storage.sync.set({ nowBalance: balance });
-
-      chrome.storage.sync.set({ lastCheck: new Date().getDate() });
-
-      setBadge();
+    if (formatedNum >= 10000 && formatedNum < 1000000) {
+      const length = formatedNum.toString().length - 3;
+      return formatedNum.toString().slice(0, length) + 'K';
     }
-  );
+
+    if (formatedNum >= 1000000) {
+      const length = formatedNum.toString().length - 6;
+      return formatedNum.toString().slice(0, length) + 'M';
+    }
+  };
+
+  chrome.action.setBadgeText({ text: numberFormatterForBadge(spending) });
+  chrome.action.setBadgeBackgroundColor({ color: '#0080FF' });
 };
 
-const startNewSession = (token) => {
-  setToken(token);
-  setDataInStorage(token);
-  chrome.runtime.reload();
+const setBalance = (balance) => {
+  chrome.storage.sync.set({ prevBalance: balance });
 };
 
-const main = async (token) => {
-  const response = await fetch(URL, {
+const setSpending = (spending) => {
+  chrome.storage.sync.set({ spending });
+};
+
+const setLastUpdate = ({ currentDate, currentTime }) => {
+  chrome.storage.sync.set({ lastUpdateDate: currentDate });
+  chrome.storage.sync.set({ lastUpdateTime: currentTime });
+};
+
+const getBalance = async (token) => {
+  const response = await fetch(balanceURL, {
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
+
+  return response.json();
+};
+
+const getWorkingIDsCampaigns = async (token) => {
+  const response = await fetch(workingCampaignsURL, {
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const { result } = await response.json();
+
+  return result.map(({ id }) => id);
+};
+
+const getCampaignsSpending = async (token) => {
+  const workingIDsCampaigns = await getWorkingIDsCampaigns(token);
+
+  if (workingIDsCampaigns.length === 0) return 0;
+
+  const today = new Date().format('yyyy-mm-dd');
+
+  const response = await fetch(statisticsURL, {
+    body: `{
+      "group_by": "campaign_id",
+      "day_from": "${today} 00:00:00",
+      "day_to": "${today} 23:59:59",
+      "campaign_id": [${workingIDsCampaigns}]
+      }`,
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+
   const result = await response.json();
 
-  if (typeof result !== 'string') {
-    // click icon action for invalid token
+  return result.reduce((acc, item) => {
+    return acc + item.spent;
+  }, 0);
+};
+
+const getStorageData = async () => {
+  return chrome.storage.sync
+    .get(['prevBalance', 'spending', 'lastUpdateDate', 'lastUpdateTime'])
+    .then(({ prevBalance, spending, lastUpdateDate, lastUpdateTime }) => ({
+      prevBalance,
+      spending,
+      lastUpdateDate,
+      lastUpdateTime,
+    }));
+};
+
+const checkTokenIsValid = async (token) => {
+  try {
+    const response = await fetch(balanceURL, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.status !== 401;
+  } catch (err) {
+    return false;
+  }
+};
+
+const startNewSession = (token) => {
+  setToken(token);
+  chrome.runtime.reload();
+};
+
+const main = async (token) => {
+  const isValidToken = await checkTokenIsValid(token);
+
+  if (!isValidToken) {
     chrome.runtime.onMessage.addListener((req, info, cb) => {
       if (req.action === 'popup_opened') {
-        cb(null);
+        cb('AuthorizationFailed');
       }
     });
   } else {
-    // set timer for every 5 minutes
+    // timer
     chrome.alarms.create('updater', {
       when: Date.now(),
       periodInMinutes: 5,
     });
 
-    // timer action
+    // updater
     chrome.alarms.onAlarm.addListener((alarm) => {
-      if (alarm.name === 'updater') {
-        setDataInStorage(result);
-      }
-    });
+      try {
+        getBalance(token).then((currentBalance) => {
+          if (alarm.name === 'updater') {
+            getStorageData().then(
+              ({ prevBalance, spending, lastUpdateDate }) => {
+                const currentDate = new Date().format('dd-mm-yyyy');
+                const currentTime = new Date().format('hh:MM');
 
-    // click icon action for valid token
-    chrome.storage.sync.get(['nowBalance', 'spending', 'history'], (res) => {
-      chrome.runtime.onMessage.addListener((req, info, cb) => {
-        if (req.action === 'popup_opened') {
-          cb(res);
-        }
-      });
+                if (
+                  prevBalance - currentBalance !== 0 ||
+                  lastUpdateDate !== currentDate
+                ) {
+                  setBalance(currentBalance);
+                  getCampaignsSpending(token).then((spending) => {
+                    setSpending(spending);
+                    setLastUpdate({ currentDate, currentTime });
+                    setBadge(spending);
+                  });
+                } else {
+                  setLastUpdate({ currentDate, currentTime });
+                  setBadge(spending);
+                }
+              }
+            );
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
     });
   }
 };
 
-// options open action
-chrome.runtime.onMessage.addListener((req, info, cb) => {
-  if (req.action === 'options_opened') {
-    startNewSession(req.token);
-  }
-});
-
-// main action
+// entry point
 chrome.storage.sync.get('token', ({ token }) => {
   main(token);
+});
+
+// options listener
+chrome.runtime.onMessage.addListener((req, info, cb) => {
+  if (req.action === 'get_token') startNewSession(req.token);
+});
+
+// popup listener
+chrome.runtime.onMessage.addListener((req, info, cb) => {
+  if (req.action === 'popup_opened') {
+    getStorageData().then(({ prevBalance, spending, lastUpdateTime }) => {
+      cb({
+        prevBalance,
+        spending: spending.toFixed(3),
+        lastUpdateTime,
+      });
+    });
+  }
+  return true;
 });

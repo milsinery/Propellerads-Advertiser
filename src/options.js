@@ -5,12 +5,12 @@ const hint = document.getElementById('hint');
 document.getElementById('loginSet').addEventListener('click', () => {
   if (loginInput.value.length === 48) {
     chrome.runtime.sendMessage({
-      action: 'options_opened',
+      action: 'get_token',
       token: loginInput.value,
     });
     window.close();
   } else {
-    hint.innerText = "Invalid token";
+    hint.innerText = 'Invalid token';
   }
 });
 

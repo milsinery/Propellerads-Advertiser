@@ -1,10 +1,10 @@
 {
   "name": {
-    "message": "PropellerAds Advertiser Cabinet Extension",
+    "message": "PropellerAds Advertiser",
     "description": "Extension name"
   },
   "description": {
-    "message": "This extension shows your balance, spendings for today and the last 6 days in realtime.",
+    "message": "This extension shows your balance, spendings for today in realtime.",
     "description": "Extension description"
   }
 }

@@ -9,13 +9,14 @@
     "64": "./icons/icon64.png",
     "128": "./icons/icon128.png"
   },
-  "permissions": ["storage", "alarms"],
+  "permissions": ["storage", "alarms", "webRequest", "notifications"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js", 
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Total Daily Spending. Click for more information"
+    "default_title": "Total daily spending"
   },
   "options_ui": {
     "page": "options.html"

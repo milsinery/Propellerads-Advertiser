@@ -1,0 +1,10 @@
+{
+  "name": {
+    "message": "Расширение PropellerAds",
+    "description": "Extension name"
+  },
+  "description": {
+    "message": "Позволяет следить за балансом и тратами в реальном времени",
+    "description": "Extension description"
+  }
+}

@@ -1,5 +1,5 @@
 const balanceURL = 'https://ssp-api.propellerads.com/v5/adv/balance';
-const workingCampaignsURL = 'https://ssp-api.propellerads.com/v5/adv/campaigns?status%5B%5D=6&is_archived=0';
+const workingCampaignsURL = 'https://ssp-api.propellerads.com/v5/adv/campaigns?status%5B%5D=6&is_archived=0&page_size=1000';
 const statisticsURL = 'https://ssp-api.propellerads.com/v5/adv/statistics';
 
 // date formatter

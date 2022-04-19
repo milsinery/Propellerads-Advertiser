@@ -66,18 +66,14 @@ const setLastUpdate = ({ currentDate, currentTime }) => {
 };
 
 const getBalance = async (token) => {
-  try {
-    const response = await fetch(balanceURL, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const response = await fetch(balanceURL, {
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-    return response.status === 401 ? false : response.json();
-  } catch (err) {
-    return false;
-  }
+  return response.json();
 };
 
 const getWorkingIDsCampaigns = async (token) => {
@@ -133,15 +129,30 @@ const getStorageData = async () => {
     }));
 };
 
+const checkTokenIsValid = async (token) => {
+  try {
+    const response = await fetch(balanceURL, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.status !== 401;
+  } catch (err) {
+    return false;
+  }
+};
+
 const startNewSession = (token) => {
   setToken(token);
   chrome.runtime.reload();
 };
 
 const main = async (token) => {
-  const currentBalance = await getBalance(token);
+  const isValidToken = await checkTokenIsValid(token);
 
-  if (currentBalance === false) {
+  if (!isValidToken) {
     chrome.runtime.onMessage.addListener((req, info, cb) => {
       if (req.action === 'popup_opened') {
         cb('AuthorizationFailed');
@@ -157,7 +168,7 @@ const main = async (token) => {
     // updater
     chrome.alarms.onAlarm.addListener((alarm) => {
       try {
-
+        getBalance(token).then((currentBalance) => {
           if (alarm.name === 'updater') {
             getStorageData().then(
               ({ prevBalance, spending, lastUpdateDate }) => {
@@ -181,7 +192,7 @@ const main = async (token) => {
               }
             );
           }
-
+        });
       } catch (e) {
         console.error(e);
       }

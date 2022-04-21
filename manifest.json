@@ -5,20 +5,20 @@
   "default_locale": "en",
   "description": "__MSG_description__",
   "icons": {
-    "32": "./icons/icon32.png",
-    "64": "./icons/icon64.png",
-    "128": "./icons/icon128.png"
+    "32": "src/icons/icon32.png",
+    "64": "src/icons/icon64.png",
+    "128": "src/icons/icon128.png"
   },
   "permissions": ["storage", "alarms", "webRequest", "notifications"],
   "background": {
-    "service_worker": "background.js", 
+    "service_worker": "src/background.js", 
     "type": "module"
   },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/popup.html",
     "default_title": "Total daily spending"
   },
   "options_ui": {
-    "page": "options.html"
+    "page": "src/options.html"
   }
 }

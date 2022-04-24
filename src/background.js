@@ -2,15 +2,14 @@ const balanceURL = 'https://ssp-api.propellerads.com/v5/adv/balance';
 const workingCampaignsURL = 'https://ssp-api.propellerads.com/v5/adv/campaigns?status%5B%5D=6&is_archived=0&page_size=1000';
 const statisticsURL = 'https://ssp-api.propellerads.com/v5/adv/statistics';
 
-// date formatter
-Date.prototype.format = function (format) {
+const dateFormatter = (date, format) => {
   const replaces = {
-    yyyy: this.getFullYear(),
-    mm: ('0' + (this.getMonth() + 1)).slice(-2),
-    dd: ('0' + this.getDate()).slice(-2),
-    hh: ('0' + this.getHours()).slice(-2),
-    MM: ('0' + this.getMinutes()).slice(-2),
-    ss: ('0' + this.getSeconds()).slice(-2),
+    yyyy: date.getFullYear(),
+    mm: ('0' + (date.getMonth() + 1)).slice(-2),
+    dd: ('0' + date.getDate()).slice(-2),
+    hh: ('0' + date.getHours()).slice(-2),
+    MM: ('0' + date.getMinutes()).slice(-2),
+    ss: ('0' + date.getSeconds()).slice(-2),
   };
 
   let result = format;
@@ -20,7 +19,7 @@ Date.prototype.format = function (format) {
   }
 
   return result;
-};
+}
 
 const setToken = (key) => {
   chrome.storage.sync.set({ token: key });
@@ -94,7 +93,7 @@ const getCampaignsSpending = async (token) => {
 
   if (workingIDsCampaigns.length === 0) return 0;
 
-  const today = new Date().format('yyyy-mm-dd');
+  const today = dateFormatter(new Date(), 'yyyy-mm-dd');
 
   const response = await fetch(statisticsURL, {
     body: `{
@@ -172,8 +171,9 @@ const main = async (token) => {
           if (alarm.name === 'updater') {
             getStorageData().then(
               ({ prevBalance, spending, lastUpdateDate }) => {
-                const currentDate = new Date().format('dd-mm-yyyy');
-                const currentTime = new Date().format('hh:MM');
+                const today = new Date();
+                const currentDate = dateFormatter(today, 'dd-mm-yyyy'); 
+                const currentTime = dateFormatter(today, 'hh:MM'); 
 
                 if (
                   prevBalance - currentBalance !== 0 ||

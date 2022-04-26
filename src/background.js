@@ -29,6 +29,8 @@ const setBadge = (spending) => {
   const numberFormatterForBadge = (num) => {
     const formatedNum = parseInt(num);
 
+    if(formatedNum === 0) return "0";
+
     if (formatedNum < 10) return num.toFixed(3).toString();
 
     if (formatedNum >= 10 && formatedNum <= 99)

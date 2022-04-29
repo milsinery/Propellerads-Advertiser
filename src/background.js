@@ -29,8 +29,6 @@ const setBadge = (spending) => {
   const numberFormatterForBadge = (num) => {
     const formatedNum = parseInt(num);
 
-    if(formatedNum === 0) return "0";
-
     if (formatedNum < 10) return num.toFixed(3).toString();
 
     if (formatedNum >= 10 && formatedNum <= 99)
@@ -168,17 +166,35 @@ const main = async (token) => {
 
     // updater
     chrome.alarms.onAlarm.addListener((alarm) => {
-      if (alarm.name === 'updater') {
-        const today = new Date();
-        const currentDate = dateFormatter(today, 'dd-mm-yyyy'); 
-        const currentTime = dateFormatter(today, 'hh:MM'); 
+      try {
+        getBalance(token).then((currentBalance) => {
+          if (alarm.name === 'updater') {
+            getStorageData().then(
+              ({ prevBalance, spending, lastUpdateDate }) => {
+                const today = new Date();
+                const currentDate = dateFormatter(today, 'dd-mm-yyyy'); 
+                const currentTime = dateFormatter(today, 'hh:MM'); 
 
-        getBalance(token).then(currentBalance => setBalance(currentBalance));
-        getCampaignsSpending(token).then((spending) => {
-          setSpending(spending);
-          setLastUpdate({ currentDate, currentTime });
-          setBadge(spending);
+                if (
+                  prevBalance - currentBalance !== 0 ||
+                  lastUpdateDate !== currentDate
+                ) {
+                  setBalance(currentBalance);
+                  getCampaignsSpending(token).then((spending) => {
+                    setSpending(spending);
+                    setLastUpdate({ currentDate, currentTime });
+                    setBadge(spending);
+                  });
+                } else {
+                  setLastUpdate({ currentDate, currentTime });
+                  setBadge(spending);
+                }
+              }
+            );
+          }
         });
+      } catch (e) {
+        console.error(e);
       }
     });
   }

@@ -1,5 +1,6 @@
 const balanceURL = 'https://ssp-api.propellerads.com/v5/adv/balance';
-const workingCampaignsURL = 'https://ssp-api.propellerads.com/v5/adv/campaigns?status%5B%5D=6&is_archived=0&page_size=1000';
+const workingCampaignsURL =
+  'https://ssp-api.propellerads.com/v5/adv/campaigns?status%5B%5D=6&is_archived=0&page_size=1000';
 const statisticsURL = 'https://ssp-api.propellerads.com/v5/adv/statistics';
 
 const dateFormatter = (date, format) => {
@@ -19,7 +20,7 @@ const dateFormatter = (date, format) => {
   }
 
   return result;
-}
+};
 
 const setToken = (key) => {
   chrome.storage.sync.set({ token: key });
@@ -166,35 +167,19 @@ const main = async (token) => {
 
     // updater
     chrome.alarms.onAlarm.addListener((alarm) => {
-      try {
+      if (alarm.name === 'updater') {
         getBalance(token).then((currentBalance) => {
-          if (alarm.name === 'updater') {
-            getStorageData().then(
-              ({ prevBalance, spending, lastUpdateDate }) => {
-                const today = new Date();
-                const currentDate = dateFormatter(today, 'dd-mm-yyyy'); 
-                const currentTime = dateFormatter(today, 'hh:MM'); 
+          const today = new Date();
+          const currentDate = dateFormatter(today, 'dd-mm-yyyy');
+          const currentTime = dateFormatter(today, 'hh:MM');
 
-                if (
-                  prevBalance - currentBalance !== 0 ||
-                  lastUpdateDate !== currentDate
-                ) {
-                  setBalance(currentBalance);
-                  getCampaignsSpending(token).then((spending) => {
-                    setSpending(spending);
-                    setLastUpdate({ currentDate, currentTime });
-                    setBadge(spending);
-                  });
-                } else {
-                  setLastUpdate({ currentDate, currentTime });
-                  setBadge(spending);
-                }
-              }
-            );
-          }
+          setBalance(currentBalance);
+          getCampaignsSpending(token).then((spending) => {
+            setSpending(spending);
+            setLastUpdate({ currentDate, currentTime });
+            setBadge(spending);
+          });
         });
-      } catch (e) {
-        console.error(e);
       }
     });
   }

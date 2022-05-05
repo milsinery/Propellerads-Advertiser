@@ -1,6 +1,6 @@
 {
   "name": "__MSG_name__",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "manifest_version": 3,
   "default_locale": "en",
   "description": "__MSG_description__",
@@ -16,7 +16,7 @@
   },
   "action": {
     "default_popup": "src/popup.html",
-    "default_title": "Total daily spending"
+    "default_title": "__MSG_badge_default_title__"
   },
   "options_ui": {
     "page": "src/options.html"

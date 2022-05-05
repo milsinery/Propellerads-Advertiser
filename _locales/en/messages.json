@@ -4,7 +4,39 @@
     "description": "Extension name"
   },
   "description": {
-    "message": "This extension shows your balance, spendings for today in realtime.",
+    "message": "Keep an eye on your spendings.",
     "description": "Extension description"
+  },
+  "badge_default_title": {
+    "message": "Today you have spent, $",
+    "description": "Popup default title"
+  },
+  "popup_spent": {
+    "message": "Today you have spent,",
+    "description": "Spent"
+  },
+  "popup_statistics": {
+    "message": "Statistics ↗",
+    "description": "Statistics link"
+  },
+  "popup_balance": {
+    "message": "Balance,",
+    "description": "Current balance"
+  },
+  "popup_add_funds": {
+    "message": "Add funds ↗",
+    "description": "Add funds link"
+  },
+  "popup_updated_info": {
+    "message": "Updated at ",
+    "description": "Update status"
+  },
+  "popup_promo_app_title": {
+    "message": "PropellerAds App",
+    "description": "PropellerAds app title"
+  },
+  "popup_promo_app_description": {
+    "message": "Download our official app to monitor your campaigns’ statistics and manage them on the go!",
+    "description": "PropellerAds app descritpion"
   }
 }

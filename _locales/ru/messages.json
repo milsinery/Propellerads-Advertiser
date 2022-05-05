@@ -4,7 +4,39 @@
     "description": "Extension name"
   },
   "description": {
-    "message": "Позволяет следить за балансом и тратами в реальном времени",
+    "message": "Будь в курсе своих трат.",
     "description": "Extension description"
+  }, 
+  "badge_default_title": {
+    "message": "Траты за сегодня, $",
+    "description": "Popup default title"
+  },
+  "popup_spent": {
+    "message": "Траты за сегодня,",
+    "description": "Spent"
+  },
+  "popup_statistics": {
+    "message": "Статистика ↗",
+    "description": "Statistics link"
+  },
+  "popup_balance": {
+    "message": "Баланс,",
+    "description": "Current balance"
+  },
+  "popup_add_funds": {
+    "message": "Пополнить счёт ↗",
+    "description": "Add funds link"
+  },
+  "popup_updated_info": {
+    "message": "Обновлено в ",
+    "description": "Update status"
+  },
+  "popup_promo_app_title": {
+    "message": "Приложение PropellerAds",
+    "description": "PropellerAds app title"
+  },
+  "popup_promo_app_description": {
+    "message": "Скачайте наше официальное приложение — следите за статистикой ваших кампаний и управляйте ими на ходу.",
+    "description": "PropellerAds app descritpion"
   }
 }

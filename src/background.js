@@ -168,17 +168,15 @@ const main = async (token) => {
     // updater
     chrome.alarms.onAlarm.addListener((alarm) => {
       if (alarm.name === 'updater') {
-        getBalance(token).then((currentBalance) => {
+        getBalance(token).then((currentBalance) => setBalance(currentBalance));
+        getCampaignsSpending(token).then((spending) => {
           const today = new Date();
           const currentDate = dateFormatter(today, 'dd-mm-yyyy');
           const currentTime = dateFormatter(today, 'hh:MM');
 
-          setBalance(currentBalance);
-          getCampaignsSpending(token).then((spending) => {
-            setSpending(spending);
-            setLastUpdate({ currentDate, currentTime });
-            setBadge(spending);
-          });
+          setSpending(spending);
+          setLastUpdate({ currentDate, currentTime });
+          setBadge(spending);
         });
       }
     });

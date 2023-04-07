@@ -3,6 +3,10 @@ const workingCampaignsURL =
   'https://ssp-api.propellerads.com/v5/adv/campaigns?status%5B%5D=6&is_archived=0&page_size=1000';
 const statisticsURL = 'https://ssp-api.propellerads.com/v5/adv/statistics';
 
+const colorNormalBalance = '#84CCFF';
+const colorLowBalance = '#FFE975';
+const colorCriticalBalance = '#FFACAC';
+
 const dateFormatter = (date, format) => {
   const replaces = {
     yyyy: date.getFullYear(),
@@ -30,6 +34,8 @@ const setBadge = (spending) => {
   const numberFormatterForBadge = (num) => {
     const formatedNum = parseInt(num);
 
+    if (formatedNum === 0) return num.toFixed(0).toString();
+
     if (formatedNum < 10) return num.toFixed(3).toString();
 
     if (formatedNum >= 10 && formatedNum <= 99)
@@ -47,10 +53,16 @@ const setBadge = (spending) => {
       return formatedNum.toString().slice(0, length) + 'M';
     }
   };
-
-  chrome.action.setBadgeText({ text: numberFormatterForBadge(spending) });
-  chrome.action.setBadgeBackgroundColor({ color: '#0080FF' });
+  
+  const formattedBalance = numberFormatterForBadge(spending);
+  chrome.action.setBadgeText({ text: formattedBalance });
 };
+
+const setBadgeColor = (balance) => {
+  const formatedBalance = parseInt(balance);
+  const badgeColor = formatedBalance < 50 && formatedBalance > 0 ? colorLowBalance : formatedBalance <= 0 ? colorCriticalBalance : colorNormalBalance;
+  chrome.action.setBadgeBackgroundColor({ color: badgeColor });
+}
 
 const setBalance = (balance) => {
   chrome.storage.sync.set({ prevBalance: balance });
@@ -168,7 +180,11 @@ const main = async (token) => {
     // updater
     chrome.alarms.onAlarm.addListener((alarm) => {
       if (alarm.name === 'updater') {
-        getBalance(token).then((currentBalance) => setBalance(currentBalance));
+        getBalance(token).then((currentBalance) => {
+          setBalance(currentBalance);
+          setBadgeColor(currentBalance);
+        });
+        
         getCampaignsSpending(token).then((spending) => {
           const today = new Date();
           const currentDate = dateFormatter(today, 'dd-mm-yyyy');

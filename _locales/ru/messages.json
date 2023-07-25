@@ -4,39 +4,47 @@
     "description": "Extension name"
   },
   "description": {
-    "message": "Будь в курсе своих трат.",
+    "message": "Следи за своим балансом, тратами и профитом.",
     "description": "Extension description"
-  }, 
+  },
   "badge_default_title": {
-    "message": "Траты за сегодня, $",
+    "message": "Текущий баланс, $",
     "description": "Popup default title"
   },
+  "popup_balance": {
+    "message": "Текущий баланс",
+    "description": "Current balance"
+  },
+  "popup_add_funds": {
+    "message": "Пополнить ↗",
+    "description": "Add funds link"
+  },
   "popup_spent": {
-    "message": "Траты за сегодня,",
-    "description": "Spent"
+    "message": "Траты за сегодня",
+    "description": "Spent today"
   },
   "popup_statistics": {
     "message": "Статистика ↗",
     "description": "Statistics link"
   },
-  "popup_balance": {
-    "message": "Баланс,",
-    "description": "Current balance"
+  "popup_profit": {
+    "message": "Профит",
+    "description": "Today profit"
   },
-  "popup_add_funds": {
-    "message": "Пополнить счёт ↗",
-    "description": "Add funds link"
+  "popup_most_profitable_campaigns": {
+    "message": "Самые профитные кампании",
+    "description": "Most profitable campaigns"
+  },
+  "popup_most_spent_campaigns": {
+    "message": "Самые затратные кампании",
+    "description": "Most expensive campaigns"
+  },
+  "popup_low_daily_campaigns": {
+    "message": "Кампании с низким дневным бюджетом",
+    "description": "Campaigns with low total budget"
   },
   "popup_updated_info": {
     "message": "Обновлено в ",
     "description": "Update status"
-  },
-  "popup_promo_app_title": {
-    "message": "Приложение PropellerAds",
-    "description": "PropellerAds app title"
-  },
-  "popup_promo_app_description": {
-    "message": "Скачайте наше официальное приложение — следите за статистикой ваших кампаний и управляйте ими на ходу.",
-    "description": "PropellerAds app descritpion"
   }
 }

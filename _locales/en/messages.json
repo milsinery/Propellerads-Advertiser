@@ -4,39 +4,47 @@
     "description": "Extension name"
   },
   "description": {
-    "message": "Keep an eye on your spendings.",
+    "message": "Keep track of your balance, spending, and profits.",
     "description": "Extension description"
   },
   "badge_default_title": {
-    "message": "Today you have spent, $",
+    "message": "Current balance, $",
     "description": "Popup default title"
   },
-  "popup_spent": {
-    "message": "Today you have spent,",
-    "description": "Spent"
-  },
-  "popup_statistics": {
-    "message": "Statistics ↗",
-    "description": "Statistics link"
-  },
   "popup_balance": {
-    "message": "Balance,",
+    "message": "Balance",
     "description": "Current balance"
   },
   "popup_add_funds": {
     "message": "Add funds ↗",
     "description": "Add funds link"
   },
+  "popup_spent": {
+    "message": "Spent today",
+    "description": "Spent today"
+  },
+  "popup_statistics": {
+    "message": "Statistics ↗",
+    "description": "Statistics link"
+  },
+  "popup_profit": {
+    "message": "Profit",
+    "description": "Today profit"
+  },
+  "popup_most_profitable_campaigns": {
+    "message": "Most profitable campaigns",
+    "description": "Most profitable campaigns"
+  },
+  "popup_most_spent_campaigns": {
+    "message": "Most expensive campaigns",
+    "description": "Most expensive campaigns"
+  },
+  "popup_low_daily_campaigns": {
+    "message": "Campaigns with low total budget",
+    "description": "Campaigns with low total budget"
+  },
   "popup_updated_info": {
     "message": "Updated at ",
     "description": "Update status"
-  },
-  "popup_promo_app_title": {
-    "message": "PropellerAds App",
-    "description": "PropellerAds app title"
-  },
-  "popup_promo_app_description": {
-    "message": "Download our official app to monitor your campaigns’ statistics and manage them on the go!",
-    "description": "PropellerAds app descritpion"
   }
 }

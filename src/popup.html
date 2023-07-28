@@ -51,7 +51,7 @@
 
       .info {
         height: min-content;
-        width: max-content;
+        width: min-content;
         min-width: 240px;
         max-width: 320px;
       }
@@ -129,13 +129,15 @@
 
       .info__main,
       .info__update-block,
-      .info__campaigns-block {
+      .info__campaigns-block,
+      .info__description-block {
         padding: var(--space-normal);
       }
 
       .info__campaigns-block {
         gap: var(--space-mid);
       }
+
       .info__main,
       .info__update-block, 
       .info__profit-campaigns-data,
@@ -298,6 +300,13 @@
         <div class="info__campaigns-block">
           <small class="info__title-low-daily-campaigns"></small>
           <div class="info__low-daily-campaigns-data"></div>
+        </div>
+      </section>
+
+      <section class="info__description">
+        <hr />
+        <div class="info__description-block">
+          <small class="info__description-text"></small>
         </div>
       </section>
 

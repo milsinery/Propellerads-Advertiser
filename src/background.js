@@ -111,9 +111,12 @@ const setMostSpentCampaigns = (campaigns) => chrome.storage.sync.set({ mostSpent
 const setCampaignsWithLowDailyBudget = (campaigns) => chrome.storage.sync.set({ campaignsWithLowDailyBudget: campaigns });
 
 const getBalance = async (token) => {
+  const appVersion = chrome.runtime.getManifest().version;
+
   const headers = new Headers({
     Accept: 'application/json',
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${token}`,
+    'X-PropellerAds-Advertiser': appVersion,
   });
 
   const response = await fetch(balanceURL, {

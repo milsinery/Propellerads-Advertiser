@@ -31,6 +31,7 @@ const getCorrectColor = (status) => {
 const profitCampaignsSection = document.getElementsByClassName('info__profit-campaigns-section');
 const spentCampaignsSection = document.getElementsByClassName('info__spent-campaigns-section');
 const lowDailyCampaignsSection = document.getElementsByClassName('info__low-daily-campaigns-section');
+const description = document.getElementsByClassName('info__description');
 
 const renderMainBlock = ( { balanceStatusColor, spending, balance, profit } ) => {
   // elements for translation
@@ -42,6 +43,7 @@ const renderMainBlock = ( { balanceStatusColor, spending, balance, profit } ) =>
   const profitCampaignsTitle = document.getElementsByClassName('info__title-profit-campaigns');
   const spentCampaignsTitle = document.getElementsByClassName('info__title-spent-campaigns');
   const lowDailyCampaignsTitle = document.getElementsByClassName('info__title-low-daily-campaigns');
+  const descriptionText = document.getElementsByClassName('info__description-text');
   const updateData = document.getElementsByClassName('info__update-title');
 
   // elements for data
@@ -58,6 +60,7 @@ const renderMainBlock = ( { balanceStatusColor, spending, balance, profit } ) =>
   profitCampaignsTitle[0].innerText = `${chrome.i18n.getMessage('popup_most_profitable_campaigns')}`;
   spentCampaignsTitle[0].innerText = `${chrome.i18n.getMessage('popup_most_spent_campaigns')}`;
   lowDailyCampaignsTitle[0].innerText = `${chrome.i18n.getMessage('popup_low_daily_campaigns')}`;
+  descriptionText[0].innerText = `${chrome.i18n.getMessage('popup_description')}`;
   updateData[0].innerText = chrome.i18n.getMessage('popup_updated_info');
 
   // setting data
@@ -182,25 +185,34 @@ const mainSection = document.getElementsByClassName('info__main-section');
 
 const renderOptions = () => chrome.tabs.create({url: 'chrome://extensions/?options=' + chrome.runtime.id});
 
-const renderInfo = ( balanceStatusColor='colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns, mostSpentCampaigns, campaignsWithLowDailyBudget, lastUpdateTime="No data, try to reopen popup" ) => {
+const renderInfo = ( balanceStatusColor='colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns=[], mostSpentCampaigns=[], campaignsWithLowDailyBudget=[], lastUpdateTime="now" ) => {
   renderMainBlock( { balanceStatusColor, spending, balance, profit } );
+
+  let haveOneSectionWithData = false;
   
   if (!mostProfitableCampaigns || mostProfitableCampaigns.length === 0) {
     profitCampaignsSection[0].style.display = 'none';
   } else {
     renderMostProfitCampaigns(mostProfitableCampaigns);
+    haveOneSectionWithData = true;
   }
 
   if (!mostSpentCampaigns || mostSpentCampaigns.length === 0) {
     spentCampaignsSection[0].style.display = 'none';
   } else {
     renderMostSpentCampaigns(mostSpentCampaigns);
+    haveOneSectionWithData = true;
   }
 
   if (!campaignsWithLowDailyBudget || campaignsWithLowDailyBudget.length === 0) {
     lowDailyCampaignsSection[0].style.display = 'none';
   } else {
     renderCampaignsWithLowDailyBudget(campaignsWithLowDailyBudget);
+    haveOneSectionWithData = true;
+  }
+
+  if(haveOneSectionWithData) {
+    description[0].style.display = 'none';
   }
 
   renderUpdateDate(lastUpdateTime);

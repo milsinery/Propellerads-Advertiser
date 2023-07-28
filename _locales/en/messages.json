@@ -43,6 +43,10 @@
     "message": "Campaigns with low total budget",
     "description": "Campaigns with low total budget"
   },
+  "popup_description": {
+    "message": "Here you will see the most profitable campaigns, most costly campaigns and campaigns with low daily budget.",
+    "description": "Info about other sections"
+  },
   "popup_updated_info": {
     "message": "Updated at ",
     "description": "Update status"

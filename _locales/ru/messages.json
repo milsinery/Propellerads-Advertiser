@@ -43,6 +43,10 @@
     "message": "Кампании с низким дневным бюджетом",
     "description": "Campaigns with low total budget"
   },
+  "popup_description": {
+    "message": "Здесь будут отображаться самые прибыльные, самые дорогостоящие кампании и кампании с низким дэйли бюджетом.",
+    "description": "Info about other sections"
+  },
   "popup_updated_info": {
     "message": "Обновлено в ",
     "description": "Update status"

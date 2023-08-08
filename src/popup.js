@@ -73,7 +73,7 @@ const renderMainBlock = ( { balanceStatusColor, spending, balance, profit } ) =>
   balanceText[0].style.color = balanceColors[balanceStatusColor];
 };
 
-const renderMostProfitCampaigns = (mostProfitableCampaigns) => {
+const renderCampaignsList = (campaigns, key) => {
   const fillData = ( htmlLink, htmlName, htmlData, htmlMeta, { campaign_name, profit, campaign_id } ) => {
     htmlLink.href = "https://partners.propellerads.com/#/statistics/" + campaign_id;
     htmlName.innerText = campaign_name;
@@ -100,77 +100,9 @@ const renderMostProfitCampaigns = (mostProfitableCampaigns) => {
     campaignMeta[0].className = "meta";
   }
 
-  const profitCampaignsList = document.getElementsByClassName('info__profit-campaigns-data');
+  const profitCampaignsList = document.getElementsByClassName(key);
 
-  for(campaign of mostProfitableCampaigns) {
-    setCampaignToCampaignsList(profitCampaignsList, campaign);
-  }
-}
-
-const renderMostSpentCampaigns = (mostSpentCampaigns) => {
-  const fillData = ( htmlLink, htmlName, htmlData, htmlMeta, { campaign_name, spent, campaign_id } ) => {
-    htmlLink.href = "https://partners.propellerads.com/#/statistics/" + campaign_id;
-    htmlName.innerText = campaign_name;
-    htmlData.innerText = spent;
-    htmlMeta.innerText = campaign_id;
-  }
-
-  const setCampaignToCampaignsList = (spentCampaignsList, campaign) => {
-    const campaignTemplate = document.getElementsByClassName('template-campaign');
-    const mockup = campaignTemplate[0].content.cloneNode(true);
-    spentCampaignsList[0].appendChild(mockup);
-
-    const campaignLink = document.getElementsByClassName('campaign__link');
-    const campaignName = document.getElementsByClassName('campaign__name');
-    const campaignData = document.getElementsByClassName('campaign__data');
-    const campaignMeta = document.getElementsByClassName('campaign__meta');
-
- 
-    fillData(campaignLink[0], campaignName[0], campaignData[0], campaignMeta[0], campaign);
-
-    campaignLink[0].className = "campaignLink";
-    campaignName[0].className = "name";
-    campaignData[0].className = "data";
-    campaignMeta[0].className = "meta";
-  }
-
-  const spentCampaignsList = document.getElementsByClassName('info__spent-campaigns-data');
-
-  for(campaign of mostSpentCampaigns) {
-    setCampaignToCampaignsList(spentCampaignsList, campaign);
-  }
-}
-
-const renderCampaignsWithLowDailyBudget = (mostProfitableCampaigns) => {
-  const fillData = ( htmlLink, htmlName, htmlData, htmlMeta, { campaign_name, spent, limit_daily_amount, campaign_id } ) => {
-    htmlLink.href = "https://partners.propellerads.com/#/statistics/" + campaign_id;
-    htmlName.innerText = campaign_name;
-    htmlData.innerText = `${spent} / ${limit_daily_amount}`;
-    htmlMeta.innerText = campaign_id;
-  }
-
-  const setCampaignToCampaignsList = (profitCampaignsList, campaign) => {
-    const campaignTemplate = document.getElementsByClassName('template-campaign');
-    const mockup = campaignTemplate[0].content.cloneNode(true);
-    profitCampaignsList[0].appendChild(mockup);
-
-    const campaignLink = document.getElementsByClassName('campaign__link');
-    const campaignName = document.getElementsByClassName('campaign__name');
-    const campaignData = document.getElementsByClassName('campaign__data');
-    const campaignMeta = document.getElementsByClassName('campaign__meta');
-
- 
-    fillData(campaignLink[0], campaignName[0], campaignData[0], campaignMeta[0], campaign);
-
-    campaignLink[0].className = "campaign";
-    campaignName[0].className = "name";
-    campaignData[0].className = "data";
-    campaignMeta[0].className = "meta";
-  }
-
-  const profitCampaignsList = document.getElementsByClassName('info__low-daily-campaigns-data');
-
-  for(campaign of mostProfitableCampaigns) {
+  for(campaign of campaigns) {
     setCampaignToCampaignsList(profitCampaignsList, campaign);
   }
 }
@@ -188,30 +120,30 @@ const renderOptions = () => chrome.tabs.create({url: 'chrome://extensions/?optio
 const renderInfo = ( balanceStatusColor='colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns=[], mostSpentCampaigns=[], campaignsWithLowDailyBudget=[], lastUpdateTime="now" ) => {
   renderMainBlock( { balanceStatusColor, spending, balance, profit } );
 
-  let haveOneSectionWithData = false;
+  let thereIsOneSectionWithData = false;
   
-  if (!mostProfitableCampaigns || mostProfitableCampaigns.length === 0) {
+  if (mostProfitableCampaigns.length === 0) {
     profitCampaignsSection[0].style.display = 'none';
   } else {
-    renderMostProfitCampaigns(mostProfitableCampaigns);
-    haveOneSectionWithData = true;
+    renderCampaignsList(mostProfitableCampaigns, 'info__profit-campaigns-data');
+    thereIsOneSectionWithData = true;
   }
 
-  if (!mostSpentCampaigns || mostSpentCampaigns.length === 0) {
+  if (mostSpentCampaigns.length === 0) {
     spentCampaignsSection[0].style.display = 'none';
   } else {
-    renderMostSpentCampaigns(mostSpentCampaigns);
-    haveOneSectionWithData = true;
+    renderCampaignsList(mostSpentCampaigns, 'info__spent-campaigns-data');
+    thereIsOneSectionWithData = true;
   }
 
-  if (!campaignsWithLowDailyBudget || campaignsWithLowDailyBudget.length === 0) {
+  if (campaignsWithLowDailyBudget.length === 0) {
     lowDailyCampaignsSection[0].style.display = 'none';
   } else {
-    renderCampaignsWithLowDailyBudget(campaignsWithLowDailyBudget);
-    haveOneSectionWithData = true;
+    renderCampaignsList(campaignsWithLowDailyBudget, 'info__low-daily-campaigns-data');
+    thereIsOneSectionWithData = true;
   }
 
-  if(haveOneSectionWithData) {
+  if(thereIsOneSectionWithData) {
     description[0].style.display = 'none';
   }
 

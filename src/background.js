@@ -50,7 +50,7 @@ const notifyAboutBalance = (currentBalance, prevBalance, lastNotificationTime, i
 
   if(fixedCurrentBalance <= 0) sendMessage('01', 'Empty balance', `Your current balance is $0 or less.`, buttons, iconUrl);
   if (fixedCurrentBalance > 0 && fixedCurrentBalance < 50) sendMessage('02', 'Low balance', `Your current balance less than $50.`, buttons, iconUrl);
-  if (fixedCurrentBalance < fixedprevBalance / 2) sendMessage('03', 'Your balance is fast ending', `In half an hour he has changed from ${prevBalance} to ${currentBalance}.`, buttons, iconUrl);
+  if (fixedprevBalance - fixedCurrentBalance < (fixedprevBalance / 2)) sendMessage('03', 'Your balance is fast ending', `In half an hour he has changed from ${prevBalance} to ${currentBalance}.`, buttons, iconUrl);
 }
 
 const setToken = (key) => chrome.storage.sync.set({ token: key });

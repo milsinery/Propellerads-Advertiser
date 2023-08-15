@@ -77,6 +77,7 @@ const renderCampaignsList = (campaigns, key) => {
   const setCampaignToCampaignsList = (profitCampaignsList, campaign) => {
     const campaignTemplate = document.getElementsByClassName('template-campaign');
     const mockup = campaignTemplate[0].content.cloneNode(true);
+    
     profitCampaignsList[0].appendChild(mockup);
 
     const campaignLink = document.getElementsByClassName('campaign__link');
@@ -110,25 +111,30 @@ const renderOptions = () => chrome.tabs.create({ url: 'chrome://extensions/?opti
 const renderInfo = (balanceStatusColor = 'colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns = [], mostSpentCampaigns = [], campaignsWithLowDailyBudget = [], lastUpdateTime = "now") => {
   renderMainBlock({ balanceStatusColor, spending, balance, profit });
 
+  let oneSectionIsVisible = false;
+
   if (mostProfitableCampaigns.length === 0) {
     profitCampaignsSection[0].style.display = 'none';
   } else {
     renderCampaignsList(mostProfitableCampaigns, 'info__profit-campaigns-data');
+    oneSectionIsVisible = true;
   }
 
   if (mostSpentCampaigns.length === 0) {
     spentCampaignsSection[0].style.display = 'none';
   } else {
     renderCampaignsList(mostSpentCampaigns, 'info__spent-campaigns-data');
+    oneSectionIsVisible = true;
   }
 
   if (campaignsWithLowDailyBudget.length === 0) {
     lowDailyCampaignsSection[0].style.display = 'none';
   } else {
     renderCampaignsList(campaignsWithLowDailyBudget, 'info__low-daily-campaigns-data');
+    oneSectionIsVisible = true;
   }
 
-  if (mostProfitableCampaigns.length !== 0 && mostSpentCampaigns.length !== 0 && campaignsWithLowDailyBudget.length !== 0) description[0].style.display = 'none';
+  if (oneSectionIsVisible) description[0].style.display = 'none';
 
   renderUpdateDate(lastUpdateTime);
 };

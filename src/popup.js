@@ -27,7 +27,8 @@ const getCorrectColor = (status) => {
   }
 }
 
-// sections visible by condition
+// initial sections
+const mainSection = document.getElementsByClassName('info__main-section');
 const profitCampaignsSection = document.getElementsByClassName('info__profit-campaigns-section');
 const spentCampaignsSection = document.getElementsByClassName('info__spent-campaigns-section');
 const lowDailyCampaignsSection = document.getElementsByClassName('info__low-daily-campaigns-section');
@@ -112,40 +113,30 @@ const renderUpdateDate = (lastUpdateTime) => {
   updateText[0].innerText = `${lastUpdateTime}`;
 }
 
-//elements for rendering
-const mainSection = document.getElementsByClassName('info__main-section');
-
 const renderOptions = () => chrome.tabs.create({url: 'chrome://extensions/?options=' + chrome.runtime.id});
 
 const renderInfo = ( balanceStatusColor='colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns=[], mostSpentCampaigns=[], campaignsWithLowDailyBudget=[], lastUpdateTime="now" ) => {
   renderMainBlock( { balanceStatusColor, spending, balance, profit } );
 
-  let thereIsOneSectionWithData = false;
-  
   if (mostProfitableCampaigns.length === 0) {
     profitCampaignsSection[0].style.display = 'none';
   } else {
     renderCampaignsList(mostProfitableCampaigns, 'info__profit-campaigns-data');
-    thereIsOneSectionWithData = true;
   }
 
   if (mostSpentCampaigns.length === 0) {
     spentCampaignsSection[0].style.display = 'none';
   } else {
     renderCampaignsList(mostSpentCampaigns, 'info__spent-campaigns-data');
-    thereIsOneSectionWithData = true;
   }
 
   if (campaignsWithLowDailyBudget.length === 0) {
     lowDailyCampaignsSection[0].style.display = 'none';
   } else {
     renderCampaignsList(campaignsWithLowDailyBudget, 'info__low-daily-campaigns-data');
-    thereIsOneSectionWithData = true;
   }
 
-  if(thereIsOneSectionWithData) {
-    description[0].style.display = 'none';
-  }
+  if(mostProfitableCampaigns.length !== 0 && mostSpentCampaigns.length !== 0 && campaignsWithLowDailyBudget.length !== 0) description[0].style.display = 'none';
 
   renderUpdateDate(lastUpdateTime);
 };

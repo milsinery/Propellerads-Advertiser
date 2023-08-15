@@ -17,15 +17,7 @@ const balanceColors = {
   colorCriticalBalance: '#EB1616',
 };
 
-const getCorrectColor = (status) => {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-    return darkPadColors[status];
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    return lightPadColors[status];
-  } else {
-    return 'init';
-  }
-}
+const getCorrectColor = (status) => window.matchMedia('(prefers-color-scheme: dark)').matches ? darkPadColors[status] : lightPadColors[status];
 
 // initial sections
 const mainSection = document.getElementsByClassName('info__main-section');
@@ -34,7 +26,7 @@ const spentCampaignsSection = document.getElementsByClassName('info__spent-campa
 const lowDailyCampaignsSection = document.getElementsByClassName('info__low-daily-campaigns-section');
 const description = document.getElementsByClassName('info__description');
 
-const renderMainBlock = ( { balanceStatusColor, spending, balance, profit } ) => {
+const renderMainBlock = ({ balanceStatusColor, spending, balance, profit }) => {
   // elements for translation
   const spentTitle = document.getElementsByClassName('info__title_spent');
   const statisticsLink = document.getElementsByClassName('info__statistics-link');
@@ -75,7 +67,7 @@ const renderMainBlock = ( { balanceStatusColor, spending, balance, profit } ) =>
 };
 
 const renderCampaignsList = (campaigns, key) => {
-  const fillData = ( htmlLink, htmlName, htmlData, htmlMeta, { campaign_name, profit, campaign_id } ) => {
+  const fillData = (htmlLink, htmlName, htmlData, htmlMeta, { campaign_name, profit, campaign_id }) => {
     htmlLink.href = "https://partners.propellerads.com/#/statistics/" + campaign_id;
     htmlName.innerText = campaign_name;
     htmlData.innerText = profit;
@@ -92,7 +84,7 @@ const renderCampaignsList = (campaigns, key) => {
     const campaignData = document.getElementsByClassName('campaign__data');
     const campaignMeta = document.getElementsByClassName('campaign__meta');
 
- 
+
     fillData(campaignLink[0], campaignName[0], campaignData[0], campaignMeta[0], campaign);
 
     campaignLink[0].className = "campaign";
@@ -103,7 +95,7 @@ const renderCampaignsList = (campaigns, key) => {
 
   const profitCampaignsList = document.getElementsByClassName(key);
 
-  for(campaign of campaigns) {
+  for (campaign of campaigns) {
     setCampaignToCampaignsList(profitCampaignsList, campaign);
   }
 }
@@ -113,10 +105,10 @@ const renderUpdateDate = (lastUpdateTime) => {
   updateText[0].innerText = `${lastUpdateTime}`;
 }
 
-const renderOptions = () => chrome.tabs.create({url: 'chrome://extensions/?options=' + chrome.runtime.id});
+const renderOptions = () => chrome.tabs.create({ url: 'chrome://extensions/?options=' + chrome.runtime.id });
 
-const renderInfo = ( balanceStatusColor='colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns=[], mostSpentCampaigns=[], campaignsWithLowDailyBudget=[], lastUpdateTime="now" ) => {
-  renderMainBlock( { balanceStatusColor, spending, balance, profit } );
+const renderInfo = (balanceStatusColor = 'colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns = [], mostSpentCampaigns = [], campaignsWithLowDailyBudget = [], lastUpdateTime = "now") => {
+  renderMainBlock({ balanceStatusColor, spending, balance, profit });
 
   if (mostProfitableCampaigns.length === 0) {
     profitCampaignsSection[0].style.display = 'none';
@@ -136,7 +128,7 @@ const renderInfo = ( balanceStatusColor='colorNormalBalance', spending = 0.000, 
     renderCampaignsList(campaignsWithLowDailyBudget, 'info__low-daily-campaigns-data');
   }
 
-  if(mostProfitableCampaigns.length !== 0 && mostSpentCampaigns.length !== 0 && campaignsWithLowDailyBudget.length !== 0) description[0].style.display = 'none';
+  if (mostProfitableCampaigns.length !== 0 && mostSpentCampaigns.length !== 0 && campaignsWithLowDailyBudget.length !== 0) description[0].style.display = 'none';
 
   renderUpdateDate(lastUpdateTime);
 };
@@ -145,6 +137,6 @@ chrome.runtime.sendMessage({ action: 'popup_opened' }, (data) => {
   if (data === 'AuthorizationFailed') {
     renderOptions();
   } else {
-    renderInfo( data.balanceStatusColor, data.spending, data.prevBalance, data.profit, data.mostProfitableCampaigns, data.mostSpentCampaigns, data.campaignsWithLowDailyBudget ,data.lastUpdateTime );
+    renderInfo(data.balanceStatusColor, data.spending, data.prevBalance, data.profit, data.mostProfitableCampaigns, data.mostSpentCampaigns, data.campaignsWithLowDailyBudget, data.lastUpdateTime);
   }
 });

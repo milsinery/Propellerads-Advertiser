@@ -1,0 +1,1 @@
+(()=>{"use strict";console.log(7),console.log((()=>{const o=document.querySelector(".template-1");console.log(o)})())})();

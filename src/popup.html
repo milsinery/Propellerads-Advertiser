@@ -50,10 +50,8 @@
       }
 
       .info {
-        height: min-content;
-        width: min-content;
-        min-width: 240px;
-        max-width: 320px;
+        min-width: 320px;
+        max-width: 400px;
       }
 
       body {
@@ -172,17 +170,24 @@
         border-radius: 4px;
         z-index: -1;
         opacity: 0;
-        transition: all 150ms ease-out;
+        transition: all 300ms ease-out;
       }
 
       .campaign:hover::before {
         opacity: 1;
-        transition: all 300ms ease-in;
+        transition: all 150ms ease-in;
       }
 
       .campaign__title {
         justify-content: space-between;
         gap: var(--space-min);
+      }
+
+      .campaign__title .name {
+        overflow: hidden;
+        text-wrap: nowrap;
+        width: 100%;
+        text-overflow: ellipsis;
       }
 
       .start {

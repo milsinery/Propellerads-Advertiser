@@ -45,7 +45,7 @@ const renderMainBlock = ({ balanceStatusColor, spending, balance, profit }) => {
   const profitText = document.getElementsByClassName('info__profit-data');
 
   // text translation
-  balanceTitle[0].innerText = `${chrome.i18n.getMessage('popup_balance')}, $ ·`;
+  balanceTitle[0].innerText = `${chrome.i18n.getMessage('popup_balance')} ·`;
   addFundsLink[0].innerText = chrome.i18n.getMessage('popup_add_funds');
   spentTitle[0].innerText = `${chrome.i18n.getMessage('popup_spent')} ·`;
   statisticsLink[0].innerText = chrome.i18n.getMessage('popup_statistics');
@@ -57,9 +57,9 @@ const renderMainBlock = ({ balanceStatusColor, spending, balance, profit }) => {
   updateData[0].innerText = chrome.i18n.getMessage('popup_updated_info');
 
   // setting data
-  spendingText[0].innerText = `${spending.toFixed(3)}`;
+  spendingText[0].innerText = `${spending === 0 ? 0 : spending.toFixed(3)}`;
   balanceText[0].innerText = `${balance}`;
-  profitText[0].innerText = `${profit.toFixed(3)}`;
+  profitText[0].innerText = `${profit <= 0 ? 0 : profit.toFixed(3)}`;
 
   // painting balance text and pad
   mainSection[0].style.background = getCorrectColor(balanceStatusColor);
@@ -171,7 +171,7 @@ const renderUpdateDate = (lastUpdateTime) => {
 
 const renderOptions = () => chrome.tabs.create({ url: 'chrome://extensions/?options=' + chrome.runtime.id });
 
-const renderInfo = (balanceStatusColor = 'colorNormalBalance', spending = 0.000, balance = 0.00, profit = 0.000, mostProfitableCampaigns = [], mostSpentCampaigns = [], campaignsWithLowDailyBudget = [], lastUpdateTime = "now") => {
+const renderInfo = (balanceStatusColor = 'colorNormalBalance', spending = 0, balance = 0, profit = 0, mostProfitableCampaigns = [], mostSpentCampaigns = [], campaignsWithLowDailyBudget = [], lastUpdateTime = "now") => {
   renderMainBlock({ balanceStatusColor, spending, balance, profit });
 
   let oneSectionIsVisible = false;

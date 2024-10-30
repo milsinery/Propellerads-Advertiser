@@ -89,7 +89,9 @@ const setBalance = (balance) => chrome.storage.sync.set({ prevBalance: balance }
 
 const setSpending = (spending) => chrome.storage.sync.set({ spending });
 
-const setSProfit = (profit) => chrome.storage.sync.set({ profit });
+const setSProfit = (profit) => {
+  chrome.storage.sync.set({ profit: profit > 0 ? profit : 0 })
+};
 
 const setBalanceStatusColor = (balanceStatusColor) => chrome.storage.sync.set({ balanceStatusColor });
 

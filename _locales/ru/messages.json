@@ -8,7 +8,7 @@
     "description": "Extension description"
   },
   "badge_default_title": {
-    "message": "Текущий баланс, $",
+    "message": "Текущий баланс",
     "description": "Popup default title"
   },
   "popup_balance": {
@@ -16,7 +16,7 @@
     "description": "Current balance"
   },
   "popup_add_funds": {
-    "message": "Пополнить ↗",
+    "message": "Пополнить счёт",
     "description": "Add funds link"
   },
   "popup_spent": {
@@ -24,7 +24,7 @@
     "description": "Spent today"
   },
   "popup_statistics": {
-    "message": "Статистика ↗",
+    "message": "Открыть статистику",
     "description": "Statistics link"
   },
   "popup_profit": {

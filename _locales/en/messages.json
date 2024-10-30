@@ -8,7 +8,7 @@
     "description": "Extension description"
   },
   "badge_default_title": {
-    "message": "Current balance, $",
+    "message": "Current balance",
     "description": "Popup default title"
   },
   "popup_balance": {
@@ -16,7 +16,7 @@
     "description": "Current balance"
   },
   "popup_add_funds": {
-    "message": "Add funds ↗",
+    "message": "Add funds",
     "description": "Add funds link"
   },
   "popup_spent": {
@@ -24,7 +24,7 @@
     "description": "Spent today"
   },
   "popup_statistics": {
-    "message": "Statistics ↗",
+    "message": "Open statistics",
     "description": "Statistics link"
   },
   "popup_profit": {

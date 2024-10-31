@@ -58,7 +58,7 @@ const renderMainBlock = ({ balanceStatusColor, spending, balance, profit }) => {
 
   // setting data
   spendingText[0].innerText = `${spending === 0 ? 0 : spending.toFixed(3)}`;
-  balanceText[0].innerText = `${balance}`;
+  balanceText[0].innerText = `${parseInt(balance) === 0 ? 0 : balance}`;
   profitText[0].innerText = `${profit <= 0 ? 0 : profit.toFixed(3)}`;
 
   // painting balance text and pad
